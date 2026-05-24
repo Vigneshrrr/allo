@@ -9,13 +9,12 @@ export const dynamic = 'force-dynamic'
  */
 export async function GET(request: Request) {
   // Protect endpoint with a secret to prevent unauthorized calls
-  const authHeader = request.headers.get('authorization')
-  if (
-    process.env.CRON_SECRET &&
-    authHeader !== `Bearer ${process.env.CRON_SECRET}`
-  ) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+const authHeader = request.headers.get('authorization')
+// During a Vercel build the env var may be undefined, so we fallback to a dummy value.
+const secret = process.env.CRON_SECRET ?? 'dummy-secret-for-build'
+if (authHeader !== `Bearer ${secret}`) {
+  return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+}
 
   try {
     const released = await releaseExpiredReservations()

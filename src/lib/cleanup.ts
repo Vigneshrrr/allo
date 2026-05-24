@@ -1,10 +1,10 @@
-import { prisma } from './prisma'
+import { getPrisma } from './prisma'
 
 /**
  * Lazy cleanup: release all expired PENDING reservations and decrement reservedUnits.
  * Called at the start of product reads to ensure accurate available stock.
  */
-export async function releaseExpiredReservations(): Promise<number> {
+  const prisma = getPrisma();
   const now = new Date()
 
   // Find all expired pending reservations

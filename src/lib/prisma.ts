@@ -43,3 +43,6 @@ if (typeof window === 'undefined') {
     }, 10000)
   }
 }
+export function getPrisma(): PrismaClient {
+  return prisma;
+}
